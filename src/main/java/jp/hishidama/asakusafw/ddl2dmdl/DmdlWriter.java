@@ -165,7 +165,7 @@ public class DmdlWriter implements DdlConverter {
 			String tableDesc = getDescription(table);
 			writeln("\"%s\"", tableDesc);
 			writeln("@windgate.jdbc.table(name = \"%s\")", tableName.toUpperCase());
-			writeln("%s = {", tableName.toLowerCase());
+			writeln("%s = {", getModelName(table));
 		}
 
 		protected void writeProperty(Table table, ColumnDefinition column) throws IOException {
@@ -181,7 +181,7 @@ public class DmdlWriter implements DdlConverter {
 			String type = getDataType(table, column);
 			writeln(tab + "\"%s\"", desc);
 			writeln(tab + "@windgate.jdbc.column(name = \"%s\")", name.toUpperCase());
-			writeln(tab + "%s : %s; // %s", name.toLowerCase(), type, column.getColDataType());
+			writeln(tab + "%s : %s; // %s", getPropertyName(table, column), type, column.getColDataType());
 		}
 
 		protected void writeFooter() throws IOException {
@@ -193,6 +193,11 @@ public class DmdlWriter implements DdlConverter {
 		}
 	}
 
+	protected String getModelName(Table table) {
+		String tableName = table.getName();
+		return tableName.toLowerCase();
+	}
+
 	protected String getDescription(Table table) {
 		Map<String, String> map = collector.getCommentTableMap();
 
@@ -202,6 +207,11 @@ public class DmdlWriter implements DdlConverter {
 			return desc;
 		}
 		return name;
+	}
+
+	protected String getPropertyName(Table table, ColumnDefinition column) {
+		String columnName = column.getColumnName();
+		return columnName.toLowerCase();
 	}
 
 	protected String getDescription(Table table, ColumnDefinition column) {

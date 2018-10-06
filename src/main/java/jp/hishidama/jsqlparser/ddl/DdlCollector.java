@@ -38,6 +38,7 @@ public class DdlCollector {
 		return createTableMap;
 	}
 
+	// https://github.com/JSQLParser/JSqlParser/pull/685
 	public void addComment(String group, Comment comment) {
 		Table table = comment.getTable();
 		if (table != null) {
